@@ -33,6 +33,11 @@
         {
             "name": "Release",
             "configurePreset": "Release"
+        },
+        {
+            "name": "flash",
+            "configurePreset": "Debug",
+            "targets": ["flash"]
         }
     ]
 }

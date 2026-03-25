@@ -66,3 +66,30 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 
     # Add user defined libraries
 )
+
+# ==============================
+# ELF / BIN 文件
+# ==============================
+set(ELF_FILE $<TARGET_FILE:${CMAKE_PROJECT_NAME}>)
+set(BIN_FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.bin)
+
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O binary ${ELF_FILE} ${BIN_FILE}
+    COMMENT "Generating BIN file"
+)
+
+# ==============================
+# OpenOCD + DAPLink 烧录
+# ==============================
+set(ELF_FILE $<TARGET_FILE:${CMAKE_PROJECT_NAME}>)
+
+add_custom_target(flash
+    DEPENDS ${CMAKE_PROJECT_NAME}
+    COMMAND openocd
+        -f interface/cmsis-dap.cfg
+        -f target/stm32f1x.cfg
+        -c "transport select swd"
+        -c "program ${ELF_FILE} verify reset exit"
+    COMMENT "Flashing via DAPLink (CMSIS-DAP)"
+)
+
