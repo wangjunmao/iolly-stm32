@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "minikame.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +45,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+MiniKame_t robot;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -54,6 +54,13 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for RobotTask */
+osThreadId_t RobotTaskHandle;
+const osThreadAttr_t RobotTask_attributes = {
+  .name = "RobotTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityBelowNormal,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -61,6 +68,7 @@ const osThreadAttr_t defaultTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
+void StartRobotTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -94,6 +102,9 @@ void MX_FREERTOS_Init(void) {
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
+  /* creation of RobotTask */
+  RobotTaskHandle = osThreadNew(StartRobotTask, NULL, &RobotTask_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -120,6 +131,26 @@ void StartDefaultTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
+}
+
+/* USER CODE BEGIN Header_StartRobotTask */
+/**
+* @brief Function implementing the RobotTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartRobotTask */
+void StartRobotTask(void *argument)
+{
+  /* USER CODE BEGIN StartRobotTask */
+  MiniKame_Init(&robot);
+  osDelay(1000);
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(2000);
+  }
+  /* USER CODE END StartRobotTask */
 }
 
 /* Private application code --------------------------------------------------*/
