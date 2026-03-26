@@ -1,31 +1,57 @@
 #include "oscillator.h"
-#include <math.h>
-
-#define PI 3.14159265358979323846f
+#include "sin_table.h"
 
 void Oscillator_Init(Oscillator_t *osc) {
-    osc->period = 1000.0f;
-    osc->amplitude = 0.0f;
-    osc->phase = 0.0f;
-    osc->offset = 90.0f;
-    osc->trim = 0.0f;
-    osc->last_time = 0;
-    osc->current_angle = 90.0f;
+    osc->period = 1000;
+    osc->amplitude = 0;
+    osc->phase = 0;
+    osc->offset = 900;   // 90.0度
+    osc->trim = 0;
+    osc->start_time = 0;
+    osc->current_angle = 900;
 }
 
-void Oscillator_SetPeriod(Oscillator_t *osc, float period) { osc->period = period; }
-void Oscillator_SetAmplitude(Oscillator_t *osc, float amplitude) { osc->amplitude = amplitude; }
-void Oscillator_SetPhase(Oscillator_t *osc, float phase) { osc->phase = phase; }
-void Oscillator_SetOffset(Oscillator_t *osc, float offset) { osc->offset = offset; }
-void Oscillator_SetTrim(Oscillator_t *osc, float trim) { osc->trim = trim; }
-void Oscillator_SetTime(Oscillator_t *osc, uint32_t time_ms) { osc->last_time = time_ms; }
-void Oscillator_Reset(Oscillator_t *osc) { /* 重置状态，可留空 */ }
+void Oscillator_SetPeriod(Oscillator_t *osc, uint16_t period) { 
+    osc->period = period; 
+}
 
-float Oscillator_Refresh(Oscillator_t *osc, uint32_t current_time_ms) {
-    // 计算角度：angle = offset + amplitude * sin(2*pi*t/period + phase)
-    float t = (float)(current_time_ms - osc->last_time);
-    float rad = 2.0f * PI * t / osc->period + osc->phase * PI / 180.0f;
-    float angle = osc->offset + osc->amplitude * sinf(rad);
-    osc->current_angle = angle;
-    return angle;
+void Oscillator_SetAmplitude(Oscillator_t *osc, int16_t amplitude) { 
+    osc->amplitude = amplitude; 
+}
+
+void Oscillator_SetPhase(Oscillator_t *osc, uint16_t phase) { 
+    osc->phase = phase; 
+}
+
+void Oscillator_SetOffset(Oscillator_t *osc, int16_t offset) { 
+    osc->offset = offset; 
+}
+
+void Oscillator_SetTrim(Oscillator_t *osc, int16_t trim) { 
+    osc->trim = trim; 
+}
+
+void Oscillator_SetStartTime(Oscillator_t *osc, uint32_t time_ms) { 
+    osc->start_time = time_ms; 
+}
+
+int16_t Oscillator_Refresh(Oscillator_t *osc, uint32_t current_time_ms) {
+    uint32_t dt = current_time_ms - osc->start_time;
+    
+    // 计算当前相位角（0~3600，对应0~360°，精度0.1°）
+    uint32_t phase_angle = (osc->phase * 10) + (3600UL * dt) / osc->period;
+    
+    // 使用正弦表获取sin值（放大1000倍）
+    int16_t sin_val = SinTable_Get(phase_angle);
+    
+    // 计算最终角度：offset + (amplitude * sin_val) / 1000
+    int32_t temp = (int32_t)osc->amplitude * sin_val;
+    int16_t angle_out = osc->offset + (int16_t)(temp / 1000);
+    
+    // 限制范围 0~1800（0~180度）
+    if (angle_out < 0) angle_out = 0;
+    if (angle_out > 1800) angle_out = 1800;
+    
+    osc->current_angle = angle_out;
+    return angle_out;
 }
