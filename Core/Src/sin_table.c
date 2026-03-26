@@ -64,42 +64,37 @@ const int16_t sin_table[901] = {
 // 获取sin值（角度×10，范围任意整数）
 // 返回值：sin值放大1000倍（范围-1000~1000）
 int16_t SinTable_Get(int16_t angle_x10) {
-    // 归一化到 0~3600（0°~360°）
-    while (angle_x10 < 0) {
-        angle_x10 += 3600;
-    }
-    while (angle_x10 >= 3600) {
-        angle_x10 -= 3600;
-    }
+    // // 归一化到 0~3600（0~360°，精度0.1°）
+    while (angle_x10 < 0) angle_x10 += 3600;
+    // while (angle_x10 >= 3600) angle_x10 -= 3600;
     
-    // 计算商（象限）和余（角度偏移）
-    uint16_t quadrant = angle_x10 / 900;      // 0:0-90°, 1:90-180°, 2:180-270°, 3:270-360°
-    uint16_t remainder = angle_x10 % 900;      // 在当前象限内的偏移（0~899）
+    // 将0.1°单位转换为新圆周单位（0~4095）
+    uint32_t new_angle = ((uint32_t)angle_x10 << 8) / 225;
+    
+    // 用位与归一化到0~4095（因为4096是2的幂）
+    new_angle &= (CIRCLE_DIV_1 - 1);
+    
+    // 计算象限（0~3），每象限1024
+    uint32_t quadrant = new_angle >> CIRCLE_DIV_4_MSK;   // 右移10位
+    uint32_t rem = new_angle & (CIRCLE_DIV_4 - 1);       // 低10位
     
     int16_t result;
-    
-    // 根据象限确定符号和查表索引
     switch (quadrant) {
-        case 0:  // 第一象限：0°~90°，sin为正
-            result = sin_table_90[remainder];
+        case 0: // 第一象限
+            result = sin_table_90[rem];
             break;
-            
-        case 1:  // 第二象限：90°~180°，sin(θ) = sin(180°-θ)，sin为正
-            result = sin_table_90[900 - remainder];
+        case 1: // 第二象限
+            result = sin_table_90[CIRCLE_DIV_4 - rem];
             break;
-            
-        case 2:  // 第三象限：180°~270°，sin(θ) = -sin(θ-180°)，sin为负
-            result = -sin_table_90[remainder];
+        case 2: // 第三象限
+            result = -sin_table_90[rem];
             break;
-            
-        case 3:  // 第四象限：270°~360°，sin(θ) = -sin(360°-θ)，sin为负
-            result = -sin_table_90[900 - remainder];
+        case 3: // 第四象限
+            result = -sin_table_90[CIRCLE_DIV_4 - rem];
             break;
-            
         default:
             result = 0;
             break;
     }
-    
     return result;
 }
