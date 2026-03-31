@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "oscillator.h"
 
-#define NUM_SERVOS 9
+#define NUM_SERVOS 10   // 扩展至10个舵机（索引0~9，第9个默认不动）
 
 typedef struct {
     int16_t trim[NUM_SERVOS];          // 校准值（角度×10）

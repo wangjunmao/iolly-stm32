@@ -18,9 +18,9 @@
 #define SERVO4  (&TIM4->CCR1)  // NO.4  TIM4_CHN1 PB6
 #define SERVO5  (&TIM2->CCR4)  // NO.5  TIM2_CHN4 PB11
 #define SERVO6  (&TIM4->CCR4)  // NO.6  TIM4_CHN4 PB9
-#define SERVO7  (&TIM3->CCR1)  // NO.7  TIM3_CHN1 PA6   <-- 修正
+#define SERVO7  (&TIM3->CCR1)  // NO.7  TIM3_CHN1 PA6
 #define SERVO8  (&TIM2->CCR3)  // NO.8  TIM2_CHN3 PB10
-#define SERVO9  (&TIM3->CCR4)  // NO.9  TIM3_CHN4 PB1   (备用)
+#define SERVO9  (&TIM3->CCR4)  // NO.9  TIM3_CHN4 PB1 (备用)
 
 // 函数声明
 void PWM_Servo_Init(void);

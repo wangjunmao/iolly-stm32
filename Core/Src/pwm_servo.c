@@ -17,26 +17,16 @@ void PWM_Servo_Init(void) {
     LL_TIM_EnableCounter(TIM4);
 
     // 启用所有可能用到的PWM通道（根据引脚定义，使用到的通道）
-    // 索引0: TIM4_CH3
-    LL_TIM_CC_EnableChannel(TIM4, LL_TIM_CHANNEL_CH3);
-    // 索引1: TIM3_CH2
-    LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2);
-    // 索引2: TIM4_CH2
-    LL_TIM_CC_EnableChannel(TIM4, LL_TIM_CHANNEL_CH2);
-    // 索引3: TIM3_CH3
-    LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH3);
-    // 索引4: TIM4_CH1
-    LL_TIM_CC_EnableChannel(TIM4, LL_TIM_CHANNEL_CH1);
-    // 索引5: TIM2_CH4
-    LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH4);
-    // 索引6: TIM4_CH4
-    LL_TIM_CC_EnableChannel(TIM4, LL_TIM_CHANNEL_CH4);
-    // 索引7: TIM3_CH1
-    LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH1);
-    // 索引8: TIM2_CH3
-    LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH3);
-    // 索引9: TIM3_CH4 (备用)
-    LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH4);
+    LL_TIM_CC_EnableChannel(TIM4, LL_TIM_CHANNEL_CH3); // SERVO0
+    LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2); // SERVO1
+    LL_TIM_CC_EnableChannel(TIM4, LL_TIM_CHANNEL_CH2); // SERVO2
+    LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH3); // SERVO3
+    LL_TIM_CC_EnableChannel(TIM4, LL_TIM_CHANNEL_CH1); // SERVO4
+    LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH4); // SERVO5
+    LL_TIM_CC_EnableChannel(TIM4, LL_TIM_CHANNEL_CH4); // SERVO6
+    LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH1); // SERVO7
+    LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH3); // SERVO8
+    LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH4); // SERVO9 (备用)
 }
 
 // 角度（×10）转脉冲宽度（微秒）
