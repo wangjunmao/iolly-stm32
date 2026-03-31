@@ -148,7 +148,10 @@ void StartRobotTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(2000);
+    LL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    osDelay(1000);
+    LL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    osDelay(1000);
   }
   /* USER CODE END StartRobotTask */
 }

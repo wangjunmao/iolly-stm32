@@ -17,6 +17,7 @@ const bool default_reverse[NUM_SERVOS] = {
 // ==================== 初始化和基础控制 ====================
 
 void MiniKame_Init(MiniKame_t *robot) {
+    PWM_Servo_Init();
     // 从常量数组复制校准值和反转标志
     memcpy(robot->trim, default_trim, sizeof(robot->trim));
     memcpy(robot->reverse, default_reverse, sizeof(robot->reverse));
