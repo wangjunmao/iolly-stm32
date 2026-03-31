@@ -421,7 +421,7 @@ void MiniKame_ShakeNo(MiniKame_t *robot) {
 
 void MiniKame_Headbang(MiniKame_t *robot, uint16_t steps, uint16_t T) {
     int16_t z_amp = 300;
-    int16_t x_amp = 300;
+    // int16_t x_amp = 300;
     int16_t ap = -100;
     int16_t hi = 300;
     uint16_t period[] = { T, T, T, T, T, T, T, T, T };
