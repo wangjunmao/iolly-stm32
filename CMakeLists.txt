@@ -47,6 +47,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     Core/Src/minikame.c
     Core/Src/pwm_servo.c
+    Core/Src/sin_table.c
     Core/Src/oscillator.c
 )
 

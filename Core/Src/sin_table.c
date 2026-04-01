@@ -81,16 +81,16 @@ int16_t SinTable_Get(int16_t angle_x10) {
     int16_t result;
     switch (quadrant) {
         case 0: // 第一象限
-            result = sin_table_90[rem];
+            result = sin_table[rem];
             break;
         case 1: // 第二象限
-            result = sin_table_90[CIRCLE_DIV_4 - rem];
+            result = sin_table[CIRCLE_DIV_4 - rem];
             break;
         case 2: // 第三象限
-            result = -sin_table_90[rem];
+            result = -sin_table[rem];
             break;
         case 3: // 第四象限
-            result = -sin_table_90[CIRCLE_DIV_4 - rem];
+            result = -sin_table[CIRCLE_DIV_4 - rem];
             break;
         default:
             result = 0;

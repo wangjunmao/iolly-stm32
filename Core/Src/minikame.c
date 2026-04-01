@@ -7,7 +7,7 @@
 
 // ==================== 默认校准值（ROM） ====================
 const int16_t default_trim[NUM_SERVOS] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    -50, -75, 0, 50, 100, -100, 20, 50, 0, 0
 };
 
 const bool default_reverse[NUM_SERVOS] = {

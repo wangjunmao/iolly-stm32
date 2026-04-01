@@ -145,6 +145,7 @@ void StartRobotTask(void *argument)
   /* USER CODE BEGIN StartRobotTask */
   MiniKame_Init(&robot);
   osDelay(1000);
+  MiniKame_Walk(&robot, 5, 1000);
   /* Infinite loop */
   for(;;)
   {
