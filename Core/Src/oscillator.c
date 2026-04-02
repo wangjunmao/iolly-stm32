@@ -40,13 +40,8 @@ int16_t Oscillator_Refresh(Oscillator_t *osc, uint32_t current_time_ms) {
     
     // 计算当前相位角（0~3600，对应0~360°，精度0.1°）
     uint32_t phase_angle = (osc->phase * 10) + (3600UL * dt) / osc->period;
-    
-    // 使用正弦表获取sin值（放大1000倍）
-    int16_t sin_val = SinTable_Get(phase_angle);
-    
-    // 计算最终角度：offset + (amplitude * sin_val) / 1000
-    int32_t temp = (int32_t)osc->amplitude * sin_val;
-    int16_t angle_out = osc->offset + (int16_t)(temp / 1000);
+    int16_t angle_out = value_x_sindeg(osc->amplitude, phase_angle);
+    angle_out += osc->offset;
     
     // 限制范围 0~1800（0~180度）
     if (angle_out < 0) angle_out = 0;
